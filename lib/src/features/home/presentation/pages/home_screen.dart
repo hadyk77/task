@@ -27,6 +27,13 @@ class HomeScreen extends StatelessWidget {
                 sl<HomeCubit>().get();
               },
               child: const Text("Tap this button to verify token refresh"),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "note: if token is expired it will be refreshed automatically, if the refresh token is expired it will redirected to login screen",
+                textAlign: TextAlign.center,
+              ),
             )
           ],
         ),
