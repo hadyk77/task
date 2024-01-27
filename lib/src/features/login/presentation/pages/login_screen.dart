@@ -72,7 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const Spacer(),
+                  SizedBox(
+                    height: 50.h,
+                  ),
                   const FastLoginOrSignUpWidget()
                 ],
               ),
