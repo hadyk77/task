@@ -28,52 +28,54 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
             padding:
                 const EdgeInsets.only(top: 30, left: 20, right: 20, bottom: 30),
-            child: Column(
-              children: [
-                Image.asset(
-                  "assets/images/logo.png",
-                  width: 150.h,
-                  height: 150.h,
-                ),
-                LoginForm(formKey: formKey),
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Forget Your Password?",
-                      style: FontStyles.textButtons,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets/images/logo.png",
+                    width: 150.h,
+                    height: 150.h,
+                  ),
+                  LoginForm(formKey: formKey),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Forget Your Password?",
+                        style: FontStyles.textButtons,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 40),
-                  child: BlocConsumer<LoginCubit, LoginState>(
-                    listener: (context, state) {
-                      if (state is LoginFailed) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.failure.message)),
-                        );
-                      }
-                      if (state is LoginSuccess) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => const HomeScreen()));
-                      }
-                    },
-                    builder: (context, state) => ButtonWidget(
-                      text: "Login",
-                      loading: state is LoginLoading,
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          loginCubit.login();
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: BlocConsumer<LoginCubit, LoginState>(
+                      listener: (context, state) {
+                        if (state is LoginFailed) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.failure.message)),
+                          );
+                        }
+                        if (state is LoginSuccess) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => const HomeScreen()));
                         }
                       },
+                      builder: (context, state) => ButtonWidget(
+                        text: "Login",
+                        loading: state is LoginLoading,
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            loginCubit.login();
+                          }
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const Spacer(),
-                const FastLoginOrSignUpWidget()
-              ],
+                  const Spacer(),
+                  const FastLoginOrSignUpWidget()
+                ],
+              ),
             ),
           ),
         ),
