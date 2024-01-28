@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 // import 'package:sentry_flutter/sentry_flutter.dart';
@@ -5,7 +7,6 @@ import 'package:dio/dio.dart';
 class ResponseValidationInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    //bool.parse(response.data['status'].toString()
     if (response.statusCode == 200 && (response.data['success'] ?? false)) {
       handler.next(response);
     } else {
@@ -23,12 +24,18 @@ class ResponseValidationInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    super.onError(
-        DioException(
+    DioException exception;
+    if (err.error is SocketException) {
+      exception = DioException(
           requestOptions: err.requestOptions,
-          error: err.response?.data['validation'],
-          message: err.response?.data['data'],
-        ),
-        handler);
+          message: "It seems you have an internet connection issue");
+    } else {
+      exception = DioException(
+        requestOptions: err.requestOptions,
+        error: err.response?.data['validation'],
+        message: err.response?.data['data'],
+      );
+    }
+    super.onError(exception, handler);
   }
 }
